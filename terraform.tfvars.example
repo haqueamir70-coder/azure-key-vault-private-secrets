@@ -1,0 +1,10 @@
+location                       = "eastus"
+resource_group_name            = "rg-kv-private-lab"
+name_prefix                    = "kv-private-lab"
+vnet_address_space             = ["10.40.0.0/16"]
+private_endpoint_subnet_prefix = ["10.40.1.0/24"]
+
+# Optional: Entra object ID of the application managed identity/service principal.
+# Leave blank to manage the Key Vault Secrets User assignment separately.
+# Never put secret values or passwords in this file.
+workload_principal_object_id = ""
