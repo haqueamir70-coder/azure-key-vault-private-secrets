@@ -1,1 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="540" viewBox="0 0 1200 540" role="img" aria-labelledby="title desc"><title id="title">Azure Key Vault private secrets architecture</title><desc id="desc">GitHub Actions provisions Azure resources. An application workload resolves the vault through private DNS and connects to its private endpoint. Microsoft Entra ID and RBAC authorize the workload.</desc><rect width="1200" height="540" rx="24" fill="#f5f8fc"/><text x="600" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#17365d">AZURE KEY VAULT | PRIVATE SECRETS ARCHITECTURE</text><rect x="35" y="105" width="220" height="118" rx="14" fill="#e8f2ff" stroke="#4a86c5" stroke-width="2"/><text x="145" y="142" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700" fill="#17365d">GitHub Actions</text><text x="145" y="172" text-anchor="middle" font-family="Arial" font-size="14" fill="#17365d">Terraform checks</text><text x="145" y="194" text-anchor="middle" font-family="Arial" font-size="14" fill="#17365d">Checkov scan</text><rect x="310" y="105" width="220" height="118" rx="14" fill="#e2f0d9" stroke="#70ad47" stroke-width="2"/><text x="420" y="142" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700" fill="#275317">Azure Identity</text><text x="420" y="172" text-anchor="middle" font-family="Arial" font-size="14" fill="#275317">OIDC recommended</text><text x="420" y="194" text-anchor="middle" font-family="Arial" font-size="14" fill="#275317">Least privilege</text><path d="M255 164 H310" stroke="#4472c4" stroke-width="3" fill="none"/><path d="M300 157 L310 164 L300 171" stroke="#4472c4" stroke-width="3" fill="none"/><rect x="575" y="84" width="590" height="370" rx="22" fill="#ffffff" stroke="#78909c" stroke-width="2" stroke-dasharray="8 5"/><text x="870" y="119" text-anchor="middle" font-family="Arial" font-size="20" font-weight="700" fill="#17365d">Azure Virtual Network</text><rect x="610" y="152" width="230" height="92" rx="13" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/><text x="725" y="183" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700" fill="#604a00">App / VM / AKS</text><text x="725" y="208" text-anchor="middle" font-family="Arial" font-size="14" fill="#604a00">Managed Identity</text><rect x="890" y="152" width="235" height="92" rx="13" fill="#e4dfec" stroke="#9673a6" stroke-width="2"/><text x="1007" y="183" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700" fill="#4b3760">Private DNS</text><text x="1007" y="208" text-anchor="middle" font-family="Arial" font-size="13" fill="#4b3760">vaultcore.azure.net</text><path d="M840 198 H890" stroke="#9673a6" stroke-width="3" fill="none"/><path d="M880 191 L890 198 L880 205" stroke="#9673a6" stroke-width="3" fill="none"/><rect x="890" y="310" width="235" height="86" rx="13" fill="#ddebf7" stroke="#5b9bd5" stroke-width="2"/><text x="1007" y="343" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700" fill="#17365d">Private Endpoint</text><text x="1007" y="368" text-anchor="middle" font-family="Arial" font-size="14" fill="#17365d">Private IP · TCP 443</text><path d="M1007 244 V310" stroke="#9673a6" stroke-width="3" fill="none"/><path d="M1000 300 L1007 310 L1014 300" stroke="#9673a6" stroke-width="3" fill="none"/><rect x="330" y="310" width="400" height="110" rx="14" fill="#fce4d6" stroke="#c65911" stroke-width="2"/><text x="530" y="344" text-anchor="middle" font-family="Arial" font-size="19" font-weight="700" fill="#7c2d12">Azure Key Vault</text><text x="530" y="372" text-anchor="middle" font-family="Arial" font-size="14" fill="#7c2d12">RBAC · Public access disabled</text><text x="530" y="395" text-anchor="middle" font-family="Arial" font-size="14" fill="#7c2d12">Soft delete · Purge protection</text><path d="M890 354 H730" stroke="#5b9bd5" stroke-width="3" fill="none"/><path d="M740 347 L730 354 L740 361" stroke="#5b9bd5" stroke-width="3" fill="none"/><path d="M420 223 V275 H530 V310" stroke="#70ad47" stroke-width="3" stroke-dasharray="7 5" fill="none"/><text x="600" y="488" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#7f1d1d">Secure access requires BOTH private network reachability and valid identity authorization.</text><text x="600" y="516" text-anchor="middle" font-family="Arial" font-size="13" fill="#526174">Architecture sample • Deploy and validate before claiming a live production implementation</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="title desc">
+<title id="title">Azure Key Vault Private Secrets — Reference Architecture</title><desc id="desc">Premium architecture illustration showing resource group, virtual network, Bastion, VM, subnets, managed identity, private endpoint, private DNS, Key Vault, GitHub Actions, Entra ID and monitoring.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fbff"/><stop offset="1" stop-color="#e9f2fb"/></linearGradient>
+ <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1687df"/><stop offset="1" stop-color="#0756a5"/></linearGradient>
+ <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8967d8"/><stop offset="1" stop-color="#6240a7"/></linearGradient>
+ <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#17365d" flood-opacity=".12"/></filter>
+ <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1687df"/></marker>
+ <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#238636"/></marker>
+ <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#8967d8"/></marker>
+ <style>
+ .h{font:700 30px Arial,sans-serif;fill:#12345b}.subh{font:500 15px Arial,sans-serif;fill:#4b6582}.section{font:700 17px Arial,sans-serif;fill:#16436d}.label{font:700 16px Arial,sans-serif;fill:#173b62}.body{font:14px Arial,sans-serif;fill:#39536f}.small{font:12px Arial,sans-serif;fill:#506b86}.white{fill:#fff}.edge{fill:none;stroke:#1687df;stroke-width:3;marker-end:url(#arrowBlue)}.edgeG{fill:none;stroke:#238636;stroke-width:3;stroke-dasharray:7 5;marker-end:url(#arrowGreen)}.edgeP{fill:none;stroke:#8967d8;stroke-width:3;stroke-dasharray:6 5;marker-end:url(#arrowPurple)}
+ </style>
+</defs>
+<rect width="1600" height="1050" rx="28" fill="url(#bg)"/>
+<text x="800" y="54" text-anchor="middle" class="h">AZURE KEY VAULT | PRIVATE SECRETS ARCHITECTURE</text>
+<text x="800" y="83" text-anchor="middle" class="subh">Terraform • Private networking • Identity-based access • Secure operations</text>
+<!-- pipeline -->
+<g filter="url(#shadow)"><rect x="48" y="125" width="330" height="150" rx="18" fill="#fff" stroke="#9b6bce" stroke-width="2"/></g>
+<rect x="48" y="125" width="330" height="40" rx="18" fill="url(#purple)"/><rect x="48" y="148" width="330" height="17" fill="url(#purple)"/>
+<text x="70" y="152" class="white" style="font:700 17px Arial">GITHUB ACTIONS / CI-CD</text>
+<circle cx="79" cy="194" r="5" fill="#238636"/><text x="94" y="199" class="body">Terraform fmt + validate</text>
+<circle cx="79" cy="222" r="5" fill="#238636"/><text x="94" y="227" class="body">Checkov IaC security scan</text>
+<circle cx="79" cy="250" r="5" fill="#238636"/><text x="94" y="255" class="body">OIDC federation recommended</text>
+<!-- deployment identity -->
+<g filter="url(#shadow)"><rect x="430" y="125" width="310" height="150" rx="18" fill="#fff" stroke="#67ad7c" stroke-width="2"/></g>
+<rect x="430" y="125" width="310" height="40" rx="18" fill="#238636"/><rect x="430" y="148" width="310" height="17" fill="#238636"/>
+<text x="452" y="152" class="white" style="font:700 17px Arial">AZURE DEPLOYMENT IDENTITY</text>
+<text x="455" y="197" class="body">• Scoped control-plane permissions</text><text x="455" y="225" class="body">• Role assignment permissions if needed</text><text x="455" y="253" class="body">• No long-lived client secret</text>
+<path d="M378 200 H430" class="edgeP"/>
+<!-- subscription + RG -->
+<rect x="35" y="320" width="1530" height="575" rx="24" fill="#ffffff" stroke="#1687df" stroke-width="2.5" stroke-dasharray="10 6"/>
+<text x="58" y="353" class="section">AZURE SUBSCRIPTION</text>
+<rect x="65" y="375" width="1470" height="485" rx="20" fill="#f8fbff" stroke="#74a9d8" stroke-width="2"/>
+<rect x="65" y="375" width="1470" height="43" rx="20" fill="#e0efff"/><rect x="65" y="398" width="1470" height="20" fill="#e0efff"/>
+<text x="88" y="403" class="section">RESOURCE GROUP  •  rg-keyvault-private-lab</text>
+<!-- VNet -->
+<rect x="350" y="440" width="875" height="380" rx="18" fill="#f1f9ff" stroke="#1687df" stroke-width="2.5"/>
+<rect x="350" y="440" width="875" height="42" rx="18" fill="#cce8ff"/><rect x="350" y="460" width="875" height="22" fill="#cce8ff"/>
+<text x="375" y="468" class="section">VIRTUAL NETWORK  •  vnet-keyvault-lab  •  10.40.0.0/16</text>
+<!-- Bastion subnet -->
+<rect x="375" y="500" width="205" height="130" rx="13" fill="#fff" stroke="#70b7e8" stroke-width="1.8"/>
+<text x="392" y="526" class="label">AzureBastionSubnet</text><text x="392" y="548" class="small">Dedicated subnet</text>
+<rect x="393" y="565" width="169" height="47" rx="9" fill="#e0efff" stroke="#1687df"/>
+<text x="477" y="584" text-anchor="middle" class="label" style="font-size:14px">Azure Bastion</text><text x="477" y="602" text-anchor="middle" class="small">Managed RDP / SSH</text>
+<!-- app subnet -->
+<rect x="600" y="500" width="350" height="280" rx="13" fill="#fff" stroke="#70b7e8" stroke-width="1.8"/>
+<text x="620" y="526" class="label">APP SUBNET  •  10.40.2.0/24</text>
+<rect x="620" y="548" width="145" height="105" rx="11" fill="#e2efff" stroke="#1687df" stroke-width="1.8"/>
+<rect x="632" y="562" width="121" height="29" rx="5" fill="#1687df"/><text x="692" y="582" text-anchor="middle" class="white" style="font:700 13px Arial">Virtual Machine</text>
+<text x="692" y="612" text-anchor="middle" class="small">Private IP only</text><text x="692" y="632" text-anchor="middle" class="small">App / admin host</text>
+<rect x="785" y="548" width="145" height="105" rx="11" fill="#fff4d5" stroke="#d5a000" stroke-width="1.8"/>
+<circle cx="857" cy="574" r="13" fill="#d5a000"/><path d="M850 574 l5 5 10 -12" fill="none" stroke="#fff" stroke-width="2.5"/>
+<text x="857" y="604" text-anchor="middle" class="label" style="font-size:14px">Managed Identity</text><text x="857" y="625" text-anchor="middle" class="small">Entra ID token</text>
+<rect x="620" y="675" width="310" height="76" rx="10" fill="#e9f6eb" stroke="#238636"/>
+<text x="775" y="700" text-anchor="middle" class="label">Workload access</text><text x="775" y="722" text-anchor="middle" class="small">HTTPS 443 + authorized identity</text><text x="775" y="740" text-anchor="middle" class="small">No credentials embedded in code</text>
+<!-- private endpoint subnet -->
+<rect x="970" y="500" width="230" height="280" rx="13" fill="#fff" stroke="#70b7e8" stroke-width="1.8"/>
+<text x="988" y="526" class="label">PRIVATE ENDPOINT</text><text x="988" y="547" class="small">Subnet 10.40.3.0/24</text>
+<rect x="991" y="572" width="188" height="85" rx="11" fill="#d9f1ff" stroke="#1687df" stroke-width="1.8"/>
+<circle cx="1085" cy="592" r="8" fill="#1687df"/><text x="1085" y="617" text-anchor="middle" class="label" style="font-size:14px">Key Vault PE</text><text x="1085" y="638" text-anchor="middle" class="small">Private IP • TCP 443</text>
+<rect x="990" y="675" width="190" height="76" rx="10" fill="#eee7fa" stroke="#8967d8"/>
+<text x="1085" y="697" text-anchor="middle" class="label" style="font-size:13px">Private DNS Zone</text><text x="1085" y="718" text-anchor="middle" class="small">privatelink.</text><text x="1085" y="736" text-anchor="middle" class="small">vaultcore.azure.net</text>
+<!-- Key vault -->
+<g filter="url(#shadow)"><rect x="1260" y="485" width="260" height="270" rx="18" fill="#fff" stroke="#d96b27" stroke-width="2.3"/></g>
+<rect x="1260" y="485" width="260" height="48" rx="18" fill="#d96b27"/><rect x="1260" y="512" width="260" height="21" fill="#d96b27"/>
+<text x="1390" y="515" text-anchor="middle" class="white" style="font:700 18px Arial">AZURE KEY VAULT</text>
+<path d="M1380 555 a15 15 0 1 1 30 0 v9 h-30z" fill="none" stroke="#d96b27" stroke-width="3"/><rect x="1377" y="563" width="36" height="30" rx="5" fill="#ffeadc" stroke="#d96b27" stroke-width="2"/><circle cx="1395" cy="575" r="3" fill="#d96b27"/><path d="M1395 578 v7" stroke="#d96b27" stroke-width="2"/>
+<text x="1390" y="620" text-anchor="middle" class="label">Secrets • Keys • Certificates</text>
+<text x="1280" y="653" class="body">✓ Azure RBAC authorization</text><text x="1280" y="679" class="body">✓ Public access disabled</text><text x="1280" y="705" class="body">✓ Soft delete + purge protection</text><text x="1280" y="731" class="body">✓ Least-privilege access</text>
+<!-- Entra identity -->
+<rect x="1260" y="385" width="260" height="80" rx="13" fill="#e9f6eb" stroke="#238636" stroke-width="1.8"/>
+<text x="1390" y="410" text-anchor="middle" class="label">MICROSOFT ENTRA ID</text><text x="1390" y="433" text-anchor="middle" class="small">Authentication + RBAC</text><text x="1390" y="451" text-anchor="middle" class="small">Secrets User role at vault scope</text>
+<!-- external admin -->
+<rect x="85" y="500" width="225" height="130" rx="14" fill="#fff" stroke="#8aa1b8" stroke-width="1.8"/>
+<text x="197" y="529" text-anchor="middle" class="label">ADMIN / ENGINEER</text><circle cx="197" cy="553" r="12" fill="#8aa1b8"/><path d="M176 590 q0 -24 21 -24 q21 0 21 24" fill="#dce7f0" stroke="#8aa1b8" stroke-width="2"/>
+<text x="197" y="613" text-anchor="middle" class="small">Browser / Azure CLI</text>
+<!-- supporting services -->
+<rect x="85" y="665" width="225" height="135" rx="14" fill="#fff" stroke="#8aa1b8" stroke-width="1.8"/>
+<text x="197" y="691" text-anchor="middle" class="label">OPERATIONS</text><text x="105" y="720" class="body">• Terraform remote state</text><text x="105" y="745" class="body">• Diagnostics + audit logs</text><text x="105" y="770" class="body">• Alerts + access reviews</text>
+<!-- connectors -->
+<path d="M197 630 V645 H477 V612" class="edge"/>
+<path d="M310 560 H350" class="edge"/>
+<path d="M765 600 H785" class="edgeG"/>
+<path d="M930 600 H991" class="edge"/>
+<path d="M1179 614 H1260" class="edge"/>
+<path d="M1390 465 V485" class="edgeG"/>
+<path d="M1085 675 V657" class="edgeP"/>
+<!-- bottom row -->
+<g filter="url(#shadow)"><rect x="45" y="920" width="470" height="80" rx="15" fill="#fff" stroke="#238636" stroke-width="1.7"/><rect x="565" y="920" width="470" height="80" rx="15" fill="#fff" stroke="#1687df" stroke-width="1.7"/><rect x="1085" y="920" width="470" height="80" rx="15" fill="#fff" stroke="#8967d8" stroke-width="1.7"/></g>
+<text x="280" y="948" text-anchor="middle" class="label">SECURITY &amp; GOVERNANCE</text><text x="280" y="973" text-anchor="middle" class="body">RBAC • Private access • Purge protection</text>
+<text x="800" y="948" text-anchor="middle" class="label">MONITORING &amp; AUDIT</text><text x="800" y="973" text-anchor="middle" class="body">Azure Monitor • Log Analytics • Alerts</text>
+<text x="1320" y="948" text-anchor="middle" class="label">IMPORTANT DESIGN RULE</text><text x="1320" y="973" text-anchor="middle" class="body">Private network + valid authorization</text>
+<text x="800" y="1028" text-anchor="middle" class="small">Reference architecture for a learning lab • Validate deployment, DNS, access policies and costs before production use.</text>
+</svg>
