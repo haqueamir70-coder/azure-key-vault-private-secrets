@@ -1,0 +1,48 @@
+name: Terraform Security Checks
+
+on:
+  pull_request:
+    paths:
+      - "**.tf"
+      - "**.hcl"
+      - "terraform.tfvars.example"
+      - ".github/workflows/terraform-checks.yml"
+  push:
+    branches: [main]
+    paths:
+      - "**.tf"
+      - "**.hcl"
+      - "terraform.tfvars.example"
+      - ".github/workflows/terraform-checks.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: Format, Validate and Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init (no backend)
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Install Checkov
+        run: python -m pip install --upgrade checkov
+
+      - name: Checkov IaC scan
+        run: checkov -d . --framework terraform --quiet
