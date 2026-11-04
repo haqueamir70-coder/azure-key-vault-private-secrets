@@ -31,3 +31,46 @@ flowchart TB
 
 ## Interview preparation note
 Answer with architecture rationale, security controls, operational failure scenarios, observability and test evidence. Clearly label implemented, CI-validated, deployed and planned scope.
+
+
+## Interview questions — suggested answers
+
+### 1. Answer
+
+Access policies are vault-specific legacy permissions; Azure RBAC uses the Azure role assignment model with scopes and centralized governance. Prefer RBAC for modern deployments where supported.
+
+### 2. Answer
+
+The private endpoint gives Key Vault a private IP inside the VNet and allows access through private network paths rather than public ingress.
+
+### 3. Answer
+
+Private DNS resolves the standard vault hostname to the private endpoint IP from linked VNets. Without it, clients may resolve public addresses and fail or bypass intended routing.
+
+### 4. Answer
+
+Managed identity gives an Azure workload an Entra identity without storing a client secret. Grant it only the required Key Vault data-plane role.
+
+### 5. Answer
+
+Assign the minimum role at the narrowest scope, such as secrets reader for a workload that only reads secrets. Avoid broad administrator roles for applications.
+
+### 6. Answer
+
+Soft delete retains deleted vaults/objects for a retention period; purge protection prevents permanent deletion during that window. It mitigates accidental or malicious deletion.
+
+### 7. Answer
+
+Create a new version, update consumers to retrieve the current version or use controlled version pinning, verify successful reads, then retire the old secret after overlap.
+
+### 8. Answer
+
+Enable diagnostic settings for audit events, route to protected Log Analytics/Event Hub/Storage, monitor denied access and secret operations, and restrict log access.
+
+### 9. Answer
+
+Check private DNS zone links and A records, endpoint connection state, NSG/UDR routes, firewall rules and identity authorization. Test DNS and TCP from the workload network.
+
+### 10. Answer
+
+Inspect publicNetworkAccess/firewall settings, resolve the vault FQDN from inside and outside the VNet, and verify public requests are denied while private access succeeds.
