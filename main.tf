@@ -69,9 +69,9 @@ resource "azurerm_key_vault" "this" {
   resource_group_name           = azurerm_resource_group.this.name
   tenant_id                     = data.azurerm_client_config.current.tenant_id
   sku_name                      = "standard"
-  rbac_authorization_enabled    = true
+  rbac_authorization_enabled   = true
   public_network_access_enabled = false
-  soft_delete_retention_days    = 90
+  soft_delete_retention_days   = 90
   purge_protection_enabled      = true
 
   network_acls {
@@ -90,7 +90,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
   resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.key_vault.name
   virtual_network_id    = azurerm_virtual_network.this.id
-  registration_enabled = false
+  registration_enabled  = false
 }
 
 resource "azurerm_private_endpoint" "key_vault" {
