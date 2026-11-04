@@ -69,9 +69,9 @@ resource "azurerm_key_vault" "this" {
   resource_group_name           = azurerm_resource_group.this.name
   tenant_id                     = data.azurerm_client_config.current.tenant_id
   sku_name                      = "standard"
-  rbac_authorization_enabled   = true
+  rbac_authorization_enabled    = true
   public_network_access_enabled = false
-  soft_delete_retention_days   = 90
+  soft_delete_retention_days    = 90
   purge_protection_enabled      = true
 
   network_acls {
@@ -111,7 +111,7 @@ resource "azurerm_private_endpoint" "key_vault" {
     private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
   }
 
-  depends_on = [azurerm_subnet_network_security_group_association.private_endpoints]
+  depends_on          = [azurerm_subnet_network_security_group_association.private_endpoints]
 }
 
 resource "azurerm_role_assignment" "workload_secrets_user" {
