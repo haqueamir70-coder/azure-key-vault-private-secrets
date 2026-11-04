@@ -111,7 +111,7 @@ resource "azurerm_private_endpoint" "key_vault" {
     private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
   }
 
-  depends_on          = [azurerm_subnet_network_security_group_association.private_endpoints]
+  depends_on = [azurerm_subnet_network_security_group_association.private_endpoints]
 }
 
 resource "azurerm_role_assignment" "workload_secrets_user" {
