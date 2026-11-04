@@ -74,3 +74,7 @@ Check private DNS zone links and A records, endpoint connection state, NSG/UDR r
 ### 10. Answer
 
 Inspect publicNetworkAccess/firewall settings, resolve the vault FQDN from inside and outside the VNet, and verify public requests are denied while private access succeeds.
+
+## Complete zero-to-hero guide
+
+See [ZERO-TO-HERO.md](./ZERO-TO-HERO.md) for the business scenario, architecture walkthrough, tool-by-tool explanations, implementation sequence, practical commands, troubleshooting playbook and additional scenario-based interview questions with answers.
