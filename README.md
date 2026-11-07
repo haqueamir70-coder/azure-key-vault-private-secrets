@@ -1,3 +1,15 @@
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B1F3A,50:0078D4,100:38BDF8&height=190&section=header&text=Azure+Key+Vault+Private+Secrets&fontSize=32&fontColor=ffffff&animation=fadeIn" alt="Azure Key Vault Private Secrets project banner" width="100%" />
+
+<img src="https://readme-typing-svg.demolab.com/?font=Inter&weight=600&size=16&pause=1600&color=38BDF8&center=true&vCenter=true&width=900&height=36&lines=Azure+Key+Vault+Private+Secrets+%E2%80%A2+Architecture+%E2%80%A2+Automation+%E2%80%A2+Security" alt="Animated project focus line" />
+
+![Azure](https://img.shields.io/badge/Key+Vault-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white) ![Terraform](https://img.shields.io/badge/Infrastructure+as+Code-844FBA?style=for-the-badge&logo=terraform&logoColor=white) ![Security](https://img.shields.io/badge/Private+Secrets-0F766E?style=for-the-badge)
+
+</div>
+
+---
+
 # Azure Key Vault — Private Secrets Management
 
 > Portfolio lab for secure, identity-based secrets access and private networking with Azure and Terraform. **This repository is a lab template; it is not a claim of deployed or production-validated infrastructure.**
