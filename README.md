@@ -1,86 +1,74 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B1F3A,50:0078D4,100:38BDF8&height=190&section=header&text=Azure+Key+Vault+Private+Secrets&fontSize=32&fontColor=ffffff&animation=fadeIn" alt="Azure Key Vault Private Secrets project banner" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:061B33,45:075985,100:38BDF8&height=225&section=header&text=Private%20Secrets%20on%20Azure&fontSize=36&fontColor=ffffff&animation=fadeIn" width="100%" alt="Azure Key Vault private secrets"/>
 
-<img src="https://readme-typing-svg.demolab.com/?font=Inter&weight=600&size=16&pause=1600&color=38BDF8&center=true&vCenter=true&width=900&height=36&lines=Azure+Key+Vault+Private+Secrets+%E2%80%A2+Architecture+%E2%80%A2+Automation+%E2%80%A2+Security" alt="Animated project focus line" />
+### Private Link · Microsoft Entra identity · Least-privilege RBAC
 
-![Azure](https://img.shields.io/badge/Key+Vault-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white) ![Terraform](https://img.shields.io/badge/Infrastructure+as+Code-844FBA?style=for-the-badge&logo=terraform&logoColor=white) ![Security](https://img.shields.io/badge/Private+Secrets-0F766E?style=for-the-badge)
+[![Azure Key Vault](https://img.shields.io/badge/Azure_Key_Vault-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://learn.microsoft.com/azure/key-vault/)
+[![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)](https://developer.hashicorp.com/terraform)
+[![Private Link](https://img.shields.io/badge/Network-Private_Link-0F766E?style=for-the-badge)](https://learn.microsoft.com/azure/private-link/)
+
+**A Terraform lab for private Azure Key Vault access, identity-based authorization, private DNS and safe secret-management lifecycle controls.**
+
+[Architecture](#-architecture) · [Deploy the lab](#-quick-start) · [Security model](#-security-model) · [Troubleshooting](#-troubleshooting)
 
 </div>
 
----
+> [!WARNING]
+> This repository is a lab template, not proof of deployed or production-validated infrastructure. A private vault is reachable only when network routing/DNS and identity authorization are both correct. Use a non-production subscription and never commit secrets or Terraform state.
 
-# Azure Key Vault — Private Secrets Management
+## Why private secrets management?
 
-> Portfolio lab for secure, identity-based secrets access and private networking with Azure and Terraform. **This repository is a lab template; it is not a claim of deployed or production-validated infrastructure.**
-
-![Azure](https://img.shields.io/badge/Azure-Key%20Vault-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white) ![Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC?style=for-the-badge&logo=terraform) ![Security](https://img.shields.io/badge/Security-Least%20Privilege-2E8B57?style=for-the-badge)
-
-## Project goals
-
-A secure vault is more than a place to store a password. This hands-on project demonstrates layered identity, network, lifecycle and delivery controls:
-
-- Azure Key Vault using Azure RBAC authorization.
-- Private Endpoint and Private DNS zone `privatelink.vaultcore.azure.net`.
-- Public network access disabled, soft delete and purge protection.
-- Optional `Key Vault Secrets User` assignment for a workload identity.
-- Terraform-managed infrastructure and non-sensitive outputs.
-- GitHub Actions for formatting, validation and Checkov scanning.
-- Troubleshooting guidance for 403 errors, DNS, connectivity and Terraform state safety.
+A vault is not secure merely because it stores secrets. Workloads need a private network path, a trusted identity, narrowly scoped permissions, lifecycle safeguards and auditability. This project brings those controls together in a repeatable Terraform example.
 
 ## Architecture
 
-![Azure Key Vault private architecture](docs/architecture-preview.svg)
+<p align="center">
+  <img src="docs/architecture-preview.svg" alt="Azure Key Vault private endpoint, DNS and workload identity architecture" width="100%"/>
+</p>
 
-Editable diagram: [Open draw.io source](docs/azure-key-vault-architecture.drawio).
+[Open editable diagrams.net source](docs/azure-key-vault-architecture.drawio)
 
 ```mermaid
 flowchart LR
-  Dev[Engineer / GitHub Actions] -->|OIDC recommended| Deploy[Azure deployment identity]
-  Deploy -->|Provision control plane| KV[Azure Key Vault]
-  subgraph VNet[Azure VNet]
-    App[App / VM / AKS workload]
-    DNS[Private DNS Zone]
+  Engineer[Engineer / CI] -->|OIDC recommended| Identity[Deployment identity]
+  Identity -->|Control-plane provisioning| Vault[Azure Key Vault]
+  subgraph PrivateNetwork[Workload VNet]
+    App[VM / AKS workload]
+    DNS[Private DNS]
     PE[Private Endpoint]
     App --> DNS --> PE
   end
-  PE -->|Private HTTPS 443| KV
-  App -->|Managed Identity token| KV
-  KV --> Audit[Recommended: Diagnostic settings / Log Analytics]
+  PE -->|Private HTTPS 443| Vault
+  App -->|Managed Identity token| Vault
+  Vault --> Audit[Diagnostic settings / Log Analytics - recommended]
 ```
 
-**Key security principle:** network reachability and identity authorization are independent requirements. RBAC alone does not make a privately restricted vault reachable.
+## Security control matrix
 
-## Repository map
+| Control | Configuration / intent |
+|---|---|
+| Authorization | Azure RBAC |
+| Workload authentication | Managed Identity |
+| Network path | Private Endpoint |
+| Name resolution | `privatelink.vaultcore.azure.net` private DNS |
+| Public access | Disabled |
+| Deletion lifecycle | Soft delete and purge protection |
+| Optional workload permission | Key Vault Secrets User, scoped to the workload principal |
+| CI checks | Terraform format, validation and Checkov |
 
-```text
-.
-├── main.tf
-├── variables.tf
-├── outputs.tf
-├── versions.tf
-├── terraform.tfvars.example
-├── .gitignore
-├── .tflint.hcl
-├── .github/workflows/terraform-checks.yml
-└── docs/
-    ├── azure-key-vault-architecture.drawio
-    ├── architecture-preview.svg
-    ├── deployment-guide.md
-    ├── troubleshooting.md
-    └── interview-notes.md
-```
-
-## Prerequisites
-
-- Terraform CLI 1.6 or later.
-- Azure CLI and access to the intended subscription/tenant.
-- Permission to create a resource group, VNet/subnet, Key Vault, private endpoint, private DNS zone/link and (if enabled) a role assignment.
-- A connected test client (such as a VM inside the VNet) for private data-plane validation.
+Network reachability and authorization are separate gates. A 403 typically indicates an authorization or token issue; a timeout or name-resolution failure points toward networking, DNS or routing. Confirm the actual error and identity before changing permissions.
 
 ## Quick start
 
-### 1. Authenticate and select subscription
+### Prerequisites
+
+- Terraform CLI 1.6+.
+- Azure CLI and access to the intended tenant/subscription.
+- Permissions to create a resource group, VNet/subnet, Key Vault, Private Endpoint, private DNS zone/link and (if enabled) role assignment.
+- A test client inside the linked VNet for data-plane validation.
+
+### 1. Select the target subscription
 
 ```bash
 az login
@@ -89,11 +77,15 @@ az account set --subscription "<SUBSCRIPTION_ID>"
 az account show --output table
 ```
 
-### 2. Configure variables
+### 2. Configure inputs
 
-Copy `terraform.tfvars.example` to `terraform.tfvars` and edit it. Do not commit the local file. The `name_prefix` validation requires 3–18 characters, starting with a letter and ending in a letter or number, with only letters, numbers and hyphens. The random suffix produces a globally unique vault name.
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
 
-### 3. Validate and review
+Edit the local file. The `name_prefix` input is validated; the generated suffix is used to produce a globally unique vault name. Keep the local file out of Git.
+
+### 3. Validate and plan
 
 ```bash
 terraform fmt -recursive
@@ -102,67 +94,88 @@ terraform validate
 terraform plan
 ```
 
-Inspect the plan, cost implications and security scan findings before approving any change.
+Inspect the complete plan and security findings before proceeding.
 
-### 4. Deploy the lab
+### 4. Deploy only to a test subscription
 
 ```bash
 terraform apply
 terraform output
 ```
 
-To grant a workload identity `Key Vault Secrets User`, set `workload_principal_object_id` to its Microsoft Entra object ID. The deployment identity also needs permission to create role assignments. Leave it empty to manage authorization separately.
+To create an optional `Key Vault Secrets User` role assignment, set `workload_principal_object_id` to the workload's Microsoft Entra object ID. The deployment identity also needs permission to create role assignments. Leave it empty if authorization is managed separately.
 
-### 5. Validate from a connected network
+### 5. Verify private access
 
-From a VM or client with a valid network path to the VNet, query `<VAULT_NAME>.vault.azure.net`. The name should resolve through the private-link DNS chain to the private endpoint's private IP. Then authenticate as the intended workload identity and test only the permitted operation. See [deployment guide](docs/deployment-guide.md).
+From a client with a route to the VNet:
 
-### 6. Tear down carefully
+1. Resolve `<vault-name>.vault.azure.net`.
+2. Confirm the private DNS chain resolves to the private endpoint address.
+3. Authenticate as the intended workload identity.
+4. Test only the operation granted by RBAC.
+5. Verify diagnostic events reach the configured monitoring destination.
+
+Follow [docs/deployment-guide.md](docs/deployment-guide.md) for the full sequence.
+
+### 6. Tear down the lab
 
 ```bash
 terraform plan -destroy
 terraform destroy
 ```
 
-Private endpoints can incur charges while provisioned. Purge protection is intentionally enabled; deleted-vault recovery and name reuse are subject to the retention lifecycle. Follow approved recovery procedures rather than bypassing safeguards.
+Private Endpoints may incur charges while provisioned. Purge protection is intentional; deleted-vault recovery and name reuse follow the retention lifecycle.
 
-## Security controls and production considerations
+## Repository map
 
-| Control | Purpose |
+```text
+main.tf / variables.tf / outputs.tf / versions.tf
+terraform.tfvars.example
+.tflint.hcl
+.github/workflows/terraform-checks.yml
+docs/
+  azure-key-vault-architecture.drawio
+  architecture-preview.svg
+  deployment-guide.md
+  troubleshooting.md
+  interview-notes.md
+```
+
+## Troubleshooting
+
+| Symptom | First checks |
 |---|---|
-| Azure RBAC | Central identity-based authorization |
-| Managed Identity | Avoid embedding workload credentials in code |
-| Private Endpoint | Private IP connectivity from a VNet |
-| Private DNS | Resolve the normal vault hostname to the private path |
-| Public access disabled | Remove public network access to this vault |
-| Soft delete and purge protection | Improve recovery and deletion safeguards |
-| Least privilege | Keep assigned access limited to required operations |
-| CI static scanning | Catch some IaC misconfiguration patterns before deployment |
-| Secured remote state | Reduce risk of secret leakage from Terraform state |
+| DNS returns public address | Private DNS zone, VNet link, record and client resolver |
+| Connection timeout | Route, NSG, endpoint approval and private IP reachability |
+| HTTP 403 | Token identity, tenant, RBAC role and data-plane scope |
+| Terraform role-assignment failure | Deployment principal permissions and object ID |
+| Secret works from one subnet only | DNS resolver and route consistency across clients |
 
-Before production use: configure diagnostic settings and alerts; use GitHub OIDC/workload identity federation; secure a remote backend with strict permissions and locking; pin Actions to reviewed immutable SHAs; add branch protections and environment approvals; test DNS and connectivity from actual workload networks; define rotation, access reviews, retention, incident response and recovery procedures.
+Use [docs/troubleshooting.md](docs/troubleshooting.md) before broadening network access or granting wider roles.
 
-## CI workflow
+## Production-hardening checklist
 
-The workflow performs Terraform format, initialization without a backend, validation and a Checkov scan. It does not authenticate to Azure or deploy resources. Inspect the **Actions** tab for actual results. A scan is not proof that the full architecture is secure; review findings and validate the runtime design.
+- [ ] Use OIDC/workload identity federation for automation.
+- [ ] Protect remote Terraform state with encryption, locking and least-privilege access.
+- [ ] Enable diagnostic settings and alert on relevant vault operations.
+- [ ] Define secret rotation, access reviews and ownership.
+- [ ] Test DNS and access from every intended workload network.
+- [ ] Keep role assignments narrow and review them periodically.
+- [ ] Document incident response, recovery and purge-protection procedures.
 
-## Learning path: basic to advanced
+## CI and evidence
 
-1. Secrets vs keys vs certificates.
-2. Microsoft Entra ID, Managed Identity and RBAC.
-3. Private Endpoint vs public endpoint and private DNS.
-4. Soft delete, purge protection and rotation.
-5. Terraform state security and CI/CD OIDC.
-6. 403 vs timeout troubleshooting.
-7. Audit, alerting, incident response and recovery.
+The GitHub Actions workflow runs formatting, backend-free initialization, validation and Checkov scanning. It does not authenticate to Azure or deploy resources. Check [Actions](../../actions) for current run evidence.
 
-See [deployment guide](docs/deployment-guide.md), [troubleshooting](docs/troubleshooting.md) and [interview notes](docs/interview-notes.md).
+## Further reading
 
-## Author
+- [Deployment guide](docs/deployment-guide.md)
+- [Troubleshooting guide](docs/troubleshooting.md)
+- [Interview notes](docs/interview-notes.md)
+- [Architecture and interview guide](docs/README.md)
+
+## Maintainer
 
 **MD Amirul Haque** · [GitHub](https://github.com/haqueamir70-coder) · [LinkedIn](https://www.linkedin.com/in/md-amirul-haque/)
 
-
-## Architecture and interview preparation
-
-See the [architecture diagram and interview questions](docs/README.md) for the repository-specific design walkthrough and technical interview guide.
+<sub>Private connectivity is not authorization. Identity is not network reachability. Design both.</sub>
